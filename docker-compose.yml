@@ -22,7 +22,7 @@ services:
   app:
     build: .
     container_name: fast-app
-    image: fast-app:v1.0
+    image: slicedb/fast-app:v1.0
     environment:
       - HUEY_REDIS=redis
       - HUEY_REDIS_PORT=6379
