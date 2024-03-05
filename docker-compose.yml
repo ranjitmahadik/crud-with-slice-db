@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - redis_network
+  slice-db:  
+    image: slicedb/slice-db:v1.1
+    container_name: slice-db-1
+    environment:
+      - HOST=0.0.0.0
+      - PORT=6379
+      - ENABLE_PERSISTENCE=False
+    ports:
+      - "6359:6379"
+    networks:
+      - redis_network
+  app:
+    build: .
+    container_name: fast-app
+    image: fast-app:v1.0
+    environment:
+      - HUEY_REDIS=redis
+      - HUEY_REDIS_PORT=6379
+      - KV_HOST=slice-db
+      - KV_PORT=6379
+    ports:
+      - "8000:8000"
+    networks:
+      - redis_network
+    depends_on:
+      - redis
+      - slice-db
+
+networks:
+  redis_network:

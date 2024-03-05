@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fast-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fast-app
+  template:
+    metadata:
+      labels:
+        app: fast-app
+    spec:
+      containers:
+      - name: fast-app
+        image: fast-app:v1.0
+        resources:
+          limits:
+            memory: "300Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8000
+        env:
+        - name: HUEY_REDIS
+          value: "redis-service"  # Reference the Redis service name
+        - name: HUEY_REDIS_PORT
+          value: "6379"
+        - name: KV_HOST
+          value: "slice-db-svc"  # Reference the Redis service name
+        - name: KV_PORT
+          value: "6380"  # Adjust based on your Redis configuration
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fastapi-service
+spec:
+  selector:
+    app: fast-app
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
