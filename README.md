@@ -1,6 +1,7 @@
 ## Simple Crud Project 
 
 A Simple Crud Project that uses Slice DB as main key value store for storing data and uses task queue huey for async processing.
+#### design document: https://app.eraser.io/workspace/SW3zVfU5dw1DggI0vqRO?origin=share
 
 ### Features
 - Slice DB: Slice DB is an ultra-simple and fast, Python-based, in-memory key-value store that communicates using the RESP protocol.
