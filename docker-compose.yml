@@ -9,7 +9,7 @@ services:
     networks:
       - redis_network
   slice-db:  
-    image: slicedb/slice-db:v1.1
+    image: slicedb/slice-db:v1.2
     container_name: slice-db-1
     environment:
       - HOST=0.0.0.0
@@ -19,10 +19,28 @@ services:
       - "6359:6379"
     networks:
       - redis_network
+  huey-worker-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: huey-worker-app
+    image: slicedb/huey-worker:v1.0
+    environment:
+      - HUEY_REDIS=redis
+      - HUEY_REDIS_PORT=6379
+      - KV_HOST=slice-db
+      - KV_PORT=6379
+    ports:
+      - "8001:8000"
+    networks:
+      - redis_network
+    depends_on:
+      - redis
+      - slice-db
   app:
     build: .
     container_name: fast-app
-    image: slicedb/fast-app:v1.0
+    image: slicedb/fast-app:v1.1
     environment:
       - HUEY_REDIS=redis
       - HUEY_REDIS_PORT=6379
