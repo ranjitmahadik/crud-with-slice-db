@@ -44,3 +44,35 @@ $ cd crud-with-slice-db
 $ cd deployment/
 $ kubectl apply -f .
 ```
+
+### End Points
+
+1. Create Post:
+```
+curl -X POST http://localhost:8000/api/v1/post \
+  -H "Content-Type: application/json" \
+  -d '{"key": "your_key", "value": "your_value", "ttl": 3600}'
+```
+2. Get Post:
+```
+curl http://localhost:8000/api/v1/post/your_key
+```
+
+3. Update Post:
+```
+curl -X PUT http://localhost:8000/api/v1/post \
+  -H "Content-Type: application/json" \
+  -d '{"key": "your_key", "value": "updated_value", "ttl": 7200}'
+```
+
+4. Delete Post:
+```
+curl -X DELETE http://localhost:8000/api/v1/post/your_key
+```
+
+5. Add Post If Not Exists:
+```
+curl -X POST http://localhost:8000/api/v1/post-if-not-exists/ \
+  -H "Content-Type: application/json" \
+  -d '{"key": "your_key", "value": "your_value", "ttl": 3600}'
+```
